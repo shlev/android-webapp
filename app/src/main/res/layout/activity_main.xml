@@ -6,13 +6,55 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
+    <Button
+        android:id="@+id/btn_getCityID"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="get City ID"
+        app:layout_constraintEnd_toStartOf="@id/btn_getWeatherCityID"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+         />
+
+    <Button
+        android:id="@+id/btn_getWeatherCityID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Weather By ID"
+        app:layout_constraintStart_toEndOf="@id/btn_getCityID"
+        app:layout_constraintEnd_toStartOf="@id/btn_getWeatherByCityNameID"
+        app:layout_constraintTop_toTopOf="@id/btn_getCityID"
+         />
+
+    <Button
+        android:id="@+id/btn_getWeatherByCityNameID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Weather by Name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/btn_getWeatherCityID"
+        app:layout_constraintStart_toEndOf="@id/btn_getWeatherCityID"
+         />
+
+    <EditText
+        android:id="@+id/et_dataInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="City Name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_getCityID" />
+
+    <ListView
+        android:id="@+id/lv_weatherReport"
+        android:layout_width="409dp"
+        android:layout_height="253dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_dataInput" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

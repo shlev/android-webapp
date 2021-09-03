@@ -27,12 +27,13 @@ public class MainActivity extends AppCompatActivity {
     Button btn_cityID, btn_getWeatherByID, btn_getWeatherByName;
     EditText et_dataInput;
     ListView lv_weatherReport;
-
+    WeatherDataService weatherDataService;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        weatherDataService = new WeatherDataService(MainActivity.this);
         //assign value to each control on the layout
         btn_cityID = findViewById(R.id.btn_getCityID);
         btn_getWeatherByID = findViewById(R.id.btn_getWeatherCityID);
@@ -44,70 +45,48 @@ public class MainActivity extends AppCompatActivity {
         btn_cityID.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toastMessage("btn city click");
-                callApi();
+
+                String queryInput = et_dataInput.getText().toString();
+                weatherDataService.getCityID(queryInput, new WeatherDataService.VollyResponseListener() {
+                    @Override
+                    public void onError(String message) {
+                        weatherDataService.toastMessage("Something wrong");
+                    }
+
+                    @Override
+                    public void onResponse(String response) {
+                        weatherDataService.toastMessage("Returned an ID of " + response);
+                    }
+                });
             }
         });
 
         btn_getWeatherByID.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toastMessage("get w by id");
+                weatherDataService.getCityForecastByID(et_dataInput.getText().toString(), new WeatherDataService.ForeCastByIDResponse() {
+                    @Override
+                    public void onError(String message) {
+                        weatherDataService.toastMessage("Something is wrong");
+                    }
+
+                    @Override
+                    public void onResponse(WeatherReportModel weatherReportModel) {
+                        weatherDataService.toastMessage(weatherReportModel.toString());
+                    }
+                });
             }
         });
 
         btn_getWeatherByName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toastMessage("get w by name");
+                weatherDataService.toastMessage("get w by name");
             }
         });
-
-
     }
 
-    private void toastMessage(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-    }
 
-    private void callApi () {
-        String queryInput = et_dataInput.getText().toString();
-        String url ="https://www.metaweather.com/api/location/search/?query=" + queryInput;
 
-// Request a string response from the provided URL.
-//        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-//                new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String response) {
-//                        // Display the first 500 characters of the response string.
-//                        toastMessage("Response is: "+ response);
-//                    }
-//                }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                toastMessage("Error Occurred");
-//            }
-//        });
-        JsonArrayRequest  request = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                String cityID = "";
-                try {
-                    JSONObject cityInfo = response.getJSONObject(0);
-                    cityID = cityInfo.getString("woeid");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                toastMessage("City ID = " + cityID);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                toastMessage("Something Wrong");
-            }
-        });
 
-        // Add the request to the RequestQueue.
-        MySingleton.getInstance(MainActivity.this).addToRequestQueue(request);
-    }
 }

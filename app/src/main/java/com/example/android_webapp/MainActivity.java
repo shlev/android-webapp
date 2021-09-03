@@ -71,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void callApi () {
-        RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
         String queryInput = et_dataInput.getText().toString();
         String url ="https://www.metaweather.com/api/location/search/?query=" + queryInput;
 
@@ -108,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-// Add the request to the RequestQueue.
-        queue.add(request);
+        // Add the request to the RequestQueue.
+        MySingleton.getInstance(MainActivity.this).addToRequestQueue(request);
     }
 }

@@ -22,12 +22,12 @@
         android:layout_height="wrap_content"
         android:text="Weather By ID"
         app:layout_constraintStart_toEndOf="@id/btn_getCityID"
-        app:layout_constraintEnd_toStartOf="@id/btn_getWeatherByCityNameID"
+        app:layout_constraintEnd_toStartOf="@id/btn_getWeatherByCityName"
         app:layout_constraintTop_toTopOf="@id/btn_getCityID"
          />
 
     <Button
-        android:id="@+id/btn_getWeatherByCityNameID"
+        android:id="@+id/btn_getWeatherByCityName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Weather by Name"

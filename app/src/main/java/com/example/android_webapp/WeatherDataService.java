@@ -19,7 +19,7 @@ import java.util.List;
 public class WeatherDataService {
 
     public static final String QUERY_FOR_CITY_ID = "https://www.metaweather.com/api/location/search/?query=";
-    public static final String QUERY_FOR_CITY__WEATHER_BY_ID = "https://www.metaweather.com/api/location/";
+    public static final String QUERY_FOR_CITY_WEATHER_BY_ID = "https://www.metaweather.com/api/location/";
     Context context;
     String cityID;
 
@@ -85,7 +85,7 @@ public class WeatherDataService {
 
     public void getCityForecastByID (String cityID, ForeCastByIDResponse foreCastByIDResponse) {
         List<WeatherReportModel> weatherReportModels = new ArrayList<>();
-        String url = QUERY_FOR_CITY__WEATHER_BY_ID + cityID;
+        String url = QUERY_FOR_CITY_WEATHER_BY_ID + cityID;
         // get json object
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
@@ -131,9 +131,36 @@ public class WeatherDataService {
         MySingleton.getInstance(context).addToRequestQueue(request);
     }
 
-//    public List<WeatherReportModel> getCityForecastByName (String cityID) {
-//
-//    }
+    public interface ForCastByNameResponse {
+        void onError(String message);
+        void onResponse(List<WeatherReportModel> weatherReportModels);
+    }
+
+    public void getCityForecastByName (String cityName, ForCastByNameResponse forCastByNameResponse) {
+       getCityID(cityName, new VollyResponseListener() {
+           @Override
+           public void onError(String message) {
+               toastMessage("Error");
+           }
+
+           @Override
+           public void onResponse(String cityID) {
+                getCityForecastByID(cityID, new ForeCastByIDResponse() {
+                    @Override
+                    public void onError(String message) {
+                        forCastByNameResponse.onError(message);
+                    }
+
+                    @Override
+                    public void onResponse(List<WeatherReportModel> weatherReportModels) {
+                        forCastByNameResponse.onResponse(weatherReportModels);
+                    }
+                });
+           }
+       });
+    }
+
+
 
     public void toastMessage(String msg) {
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();

@@ -86,7 +86,19 @@ public class MainActivity extends AppCompatActivity {
         btn_getWeatherByName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                weatherDataService.toastMessage("get w by name");
+                weatherDataService.getCityForecastByName(et_dataInput.getText().toString(), new WeatherDataService.ForCastByNameResponse() {
+                    @Override
+                    public void onError(String message) {
+                        weatherDataService.toastMessage("Something is wrong");
+                    }
+
+                    @Override
+                    public void onResponse(List<WeatherReportModel> weatherReportModels) {
+                        // put the entire list into the listview context
+                        ArrayAdapter arrayAdapter = new ArrayAdapter(MainActivity.this, android.R.layout.simple_list_item_1, weatherReportModels);
+                        lv_weatherReport.setAdapter(arrayAdapter);
+                    }
+                });
             }
         });
     }
